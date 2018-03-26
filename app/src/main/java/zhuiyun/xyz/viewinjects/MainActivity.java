@@ -2,7 +2,6 @@ package zhuiyun.xyz.viewinjects;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 import zhuiyun.xyz.injectutils.BindClick;
@@ -26,6 +25,6 @@ public class MainActivity extends AppCompatActivity {
     @ClickInterval(5000)
     public void play(){
         tv.setText("bindClick");
-        Log.e("gao", "play: ");
+
     }
 }
