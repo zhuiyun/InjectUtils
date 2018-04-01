@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -29,8 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void play(View view) {
+
         tv.setText("bindClick");
-        Log.e("gao", "play: ");
         PermissionHelper.with(this).requestCode(0).requestPersion(new String[]{Manifest.permission.CALL_PHONE}).permissionRequest();
 //        callPhone();
 
@@ -38,10 +39,15 @@ public class MainActivity extends AppCompatActivity {
 
     @AccessPermission(requestCode = 0)
     private void callPhone() {
-        Log.e("gao", "callPhone: ");
+        Log.d("gao", "callPhone: ");
         Intent intent = new Intent(Intent.ACTION_CALL);
-        intent.setData(Uri.parse("tel:110"));
-        Log.e("gao", "callPhone: 1");
+        intent.setData(Uri.parse("tel:17620436060"));
         startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        PermissionHelper.resultPermissions(this,requestCode,permissions);
     }
 }

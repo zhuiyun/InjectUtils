@@ -41,10 +41,14 @@ public class PermissionUtils {
                 method.setAccessible(true);
                 if (annotation.requestCode() == requestCode) {
                     try {
-                        method.invoke(object, new Object[]{});
+                        Log.d("gao", "excuteSuccess: 4"+method.getName());
+                        method.invoke(object);
                     } catch (IllegalAccessException e) {
+                        Log.d("gao", "excuteSuccess: "+e.toString());
+
                         e.printStackTrace();
                     } catch (InvocationTargetException e) {
+                        Log.d("gao", "excuteSuccess: "+e.toString());
                         e.printStackTrace();
                     }
                 }
@@ -52,16 +56,13 @@ public class PermissionUtils {
         }
     }
 
-    public static List<String> isAllowPermission(Object object, List<String> mRequestPermission) {
-        Log.e("gao", "isAllowPermission: "+mRequestPermission.size());
+    public static List<String> isAllowPermission(Object object, String[] mRequestPermission) {
         List<String> deniedPermission=new ArrayList<>();
-        Log.e("gao", "isAllowPermission: ");
-        for (int i = 0; i < mRequestPermission.size(); i++) {
-            int m = ContextCompat.checkSelfPermission(getActivity(object), mRequestPermission.get(i));
+        for (int i = 0; i < mRequestPermission.length; i++) {
+            int m = ContextCompat.checkSelfPermission(getActivity(object), mRequestPermission[i]);
             if(m!= PackageManager.PERMISSION_GRANTED){
-                deniedPermission.add(mRequestPermission.get(i));
+                deniedPermission.add(mRequestPermission[i]);
             }
-            Log.e("gao", "isAllowPermission: "+deniedPermission.size());
         }
 //        for(String requestPermission:mRequestPermission){
 //

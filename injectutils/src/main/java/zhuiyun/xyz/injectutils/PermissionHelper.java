@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 public class PermissionHelper {
     private Object object;
     private  int requestCode;
-    private  List<String> permissions=new ArrayList<>();
+    private  String[] permissions;
 
     public  PermissionHelper(Object object) {
         this.object = object;
@@ -30,7 +31,7 @@ public class PermissionHelper {
     }
     public  PermissionHelper requestCode(int code) {
         this.requestCode=code;
-        return  new PermissionHelper(this);
+        return  this;
     }
 
     /**
@@ -39,10 +40,8 @@ public class PermissionHelper {
      * @return
      */
     public PermissionHelper requestPersion(String... s) {
-        for (String str: s) {
-            permissions.add(str);
-        }
-        return  new PermissionHelper(this);
+        this.permissions=s;
+        return  this;
     }
 
 
@@ -50,23 +49,37 @@ public class PermissionHelper {
 
     //请求权限
     public void permissionRequest() {
-
+        Log.d("gao", "permissionRequest: ");
         //大于6.0
         if(PermissionUtils.isOverMarshmallow()){
-            List<Integer> list=new ArrayList<>();
 
             List<String> disAllowPermission = PermissionUtils.isAllowPermission(object, permissions);
             if(disAllowPermission.size()>0){
-                Log.e("gao", "request: 4");
+                Log.d("gao", "permissionRequest: ");
                 ActivityCompat.requestPermissions(PermissionUtils.getActivity(object),disAllowPermission.toArray(new String[disAllowPermission.size()]),requestCode);
             }else{
-                Log.e("gao", "request: 5");
+                Log.d("gao", "permissionRequest: 1");
                 PermissionUtils.excuteSuccess(object, requestCode);
             }
         }else{
-            Log.e("gao", "request: 3");
             //注解+反射
             PermissionUtils.excuteSuccess(object, requestCode);
+        }
+    }
+
+    public void permissionResult() {
+
+    }
+
+    public static void resultPermissions(Activity mActivity, int requestCode, String[] permissions) {
+        List<String> disAllowPermission = PermissionUtils.isAllowPermission(mActivity, permissions);
+        if(disAllowPermission.size()>0){
+            Log.d("gao", "permissionResult: ");
+            Toast.makeText(PermissionUtils.getActivity(mActivity),"权限已拒绝",Toast.LENGTH_SHORT).show();
+//            ActivityCompat.requestPermissions(PermissionUtils.getActivity(object),disAllowPermission.toArray(new String[disAllowPermission.size()]),requestCode);
+        }else{
+            Log.d("gao", "permissionResult: 1");
+            PermissionUtils.excuteSuccess(mActivity, requestCode);
         }
     }
 }
